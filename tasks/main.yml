@@ -1,0 +1,59 @@
+---
+
+- name: Install russian locale
+  command: "locale-gen ru_RU.UTF-8"
+
+- name: Install python tools
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-software-properties
+    - python-pycurl
+
+- name: Install ntp
+  apt:
+    name: ntp
+    state: present
+
+- name: Start ntp service
+  service:
+    name: ntp
+    state: started
+    enabled: true
+
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+
+- name: Start fail2ban service
+  service:
+    name: fail2ban
+    state: started
+    enabled: true
+
+- name: Add sudo group
+  group:
+    name: sudo
+    state: present
+
+- name: Add vagrant user
+  user:
+    name: vagrant
+    state: present
+
+- name: Add vagrant to sudo group
+  user:
+    name: vagrant
+    group: sudo
+    append: true
+  ignore_errors: yes
+
+- name: Make sudoers right
+  copy:
+    src: sudoers
+    dest: /etc/sudoers
+    owner: root
+
+- include: user.yml

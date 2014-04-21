@@ -1,0 +1,40 @@
+---
+- name: Create user for web apps
+  user:
+    name: "{{ user }}"
+    password: "{{ password }}"
+    state: present
+    shell: /bin/bash
+    group: sudo
+
+- name: Set up authorized_keys for the root
+  authorized_key:
+    user: root
+    key: "{{ item }}"
+  with_items: root_authorized_keys
+
+- name: Set up authorized_keys for the user
+  authorized_key:
+    user: "{{ user }}"
+    key: "{{ item }}"
+  with_items: user_authorized_keys
+
+- name: Prepare SSH directory
+  file:
+    dest: "/home/{{ user }}/.ssh"
+    state: directory
+    mode: 0770
+    owner: "{{ user }}"
+
+- name: Copy private key
+  copy:
+    src: "../../../keys/server"
+    dest: "/home/{{ user }}/.ssh/id_rsa"
+    mode: 0600
+    owner: "{{ user }}"
+
+- name: Copy public key
+  copy:
+    src: "../../../keys/server.pub"
+    dest: "/home/{{ user }}/.ssh/id_rsa.pub"
+    owner: "{{ user }}"
