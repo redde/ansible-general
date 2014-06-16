@@ -33,6 +33,11 @@
     state: started
     enabled: true
 
+- name: Install logrotate
+  apt:
+    name: logrotate
+    state: present
+
 - name: Add sudo group
   group:
     name: sudo
