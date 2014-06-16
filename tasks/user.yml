@@ -23,7 +23,7 @@
   file:
     dest: "/home/{{ user }}/.ssh"
     state: directory
-    mode: 0770
+    mode: 0700
     owner: "{{ user }}"
 
 - name: Copy private key
@@ -37,4 +37,5 @@
   copy:
     src: "../../../keys/server.pub"
     dest: "/home/{{ user }}/.ssh/id_rsa.pub"
+    mode: 0600
     owner: "{{ user }}"
