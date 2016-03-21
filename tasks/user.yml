@@ -11,13 +11,13 @@
   authorized_key:
     user: root
     key: "{{ item }}"
-  with_items: root_authorized_keys
+  with_items: "{{ root_authorized_keys }}"
 
 - name: Set up authorized_keys for the user
   authorized_key:
     user: "{{ user }}"
     key: "{{ item }}"
-  with_items: user_authorized_keys
+  with_items: "{{ user_authorized_keys }}"
 
 - name: Prepare SSH directory
   file:
